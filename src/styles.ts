@@ -5,6 +5,10 @@ position:absolute;z-index:20;top:0;left:0;width:100%;display:flex;align-items:ce
 .brand{font-size:30px;font-weight:600;letter-spacing:-1.6px;line-height:.85;display:flex;flex-direction:column;}
 .brand span{font-size:15px;letter-spacing:-.3px;margin-top:5px;}
 .nav-note{font-size:13px;letter-spacing:.03em;}
+.nav-links{display:flex;align-items:center;gap:25px;}.booking-link{display:inline-flex;align-items:center;gap:12px;border:1px solid #ffffff80;border-radius:30px;padding:12px 18px;font-size:14px;white-space:nowrap;}
+@media(max-width:1000px){.nav-note{display:none;}}
+@media(max-width:450px){.nav-links{gap:14px;}.booking-link{font-size:12px;padding:11px 13px;gap:8px;}.archive-link{font-size:12px!important;}.archive-link span{display:none;}}
+@media(max-width:380px){.nav-links .archive-link{display:none;}}
 .archive-link{font-size:14px;} .archive-link span{margin-left:12px;font-size:12px;opacity:.7;}
 @media(max-width:700px){padding:25px 6vw;.nav-note{display:none}.brand{font-size:26px}.archive-link span{margin-left:5px;}}
 `
@@ -54,7 +58,7 @@ padding:100px 5vw 140px;background:#101211;
 .archive-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:65px;}
 .section-tag{font-size:12px;color:#b4b7ab;text-transform:uppercase;letter-spacing:.12em;}
 h2{font-family:'Barlow Condensed',Impact,sans-serif;font-size:clamp(65px,11vw,170px);letter-spacing:-.03em;font-weight:500;line-height:1;margin:22px 0 0;}h2 span{font:14px 'DM Sans',sans-serif;vertical-align:top;display:inline-block;margin:15px;}
-.layout-button{background:none;border:1px solid #ffffff50;border-radius:50px;padding:14px 20px;font-size:13px;white-space:nowrap;}
+.layout-button{display:inline-flex;align-items:center;gap:10px;background:none;border:1px solid #ffffff50;border-radius:50px;padding:14px 20px;font-size:13px;white-space:nowrap;}
 @media(max-width:700px){padding:75px 6vw;.archive-heading{align-items:flex-start;flex-direction:column;margin-bottom:35px;}h2 span{margin:6px;font-size:12px;}}
 `
 export const Grid = styled.div<{ $compact:boolean }>`

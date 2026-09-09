@@ -28,4 +28,14 @@ Legg JPG, JPEG, PNG, WebP eller AVIF i `src/assets/photos/`, også i undermapper
 
 `npm run build` forbereder bilder, sjekker TypeScript og lager produksjonsbygg. `npm run lint` kjører Oxlint. `npm run preview` viser produksjonsbygget.
 
-Barlow Condensed og DM Sans lastes fra Google Fonts med systemfonter som reserve. Prosjektet er fortsatt lokalt; kontaktinformasjon og eventuell publisering er ikke satt opp.
+Barlow Condensed og DM Sans lastes fra Google Fonts med systemfonter som reserve. Alle grensesnittikoner er SVG og gjengis likt på mobil og PC.
+
+## Kontakt og Netlify Forms
+
+`/kontakt/` inneholder et bookingskjema, og `/takk/` er takkesiden. Netlify-konfigurasjonen bygger med `npm run build`, publiserer `dist` og støtter direkte åpning av begge adressene.
+
+Skjemaet heter `booking`. Den skjulte HTML-definisjonen i `index.html` har samme feltnavn som React-skjemaet i `src/Contact.tsx`, inkludert honeypot. Behold disse i samsvar ved endringer.
+
+Aktiver form detection i Netlify under Forms og deploy på nytt. Kontroller at `booking` vises der, og konfigurer eventuelle e-postvarsler. Produksjonsskjemaet bruker vanlig POST til `/takk/`; Netlify håndterer mottak og omdirigering. Lokalt avbrytes innsending med en tydelig beskjed; ingen data sendes og ingen falsk kvittering vises. Innsending er ikke ende-til-ende-verifisert mot Netlify.
+
+Oppsett: https://docs.netlify.com/manage/forms/setup/

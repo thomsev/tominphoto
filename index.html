@@ -8,6 +8,18 @@
     <title>Tomin Photo — Fotografi</title>
   </head>
   <body>
+    <!-- Static field definitions for Netlify's deploy-time form detection. -->
+    <form name="booking" method="POST" action="/takk/" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="booking" />
+      <input name="bot-field" />
+      <input name="session-type" />
+      <input name="name" />
+      <input name="email" type="email" />
+      <input name="phone" type="tel" />
+      <input name="location" />
+      <input name="date" type="date" />
+      <textarea name="message"></textarea>
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import { useGSAP } from '@gsap/react'
 import { gsap, Flip, ScrollTrigger } from './lib/animation'
 import { photos, chapters, type Photo } from './data/photos'
+import { Icon } from './Icon'
 import { Nav, Story, Stage, Panel, Rail, Intro, Archive, Grid, Tile, Footer, Viewer } from './styles'
 
 const pad = (n:number) => String(n).padStart(2,'0')
@@ -86,7 +87,7 @@ export default function App() {
 
   return <div ref={root}>
     <a className="skip" href="#arbeider">Hopp til bildene</a>
-    <Nav><a className="brand" href="#top" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a><span className="nav-note">Et blikk. En historie.</span><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)}) ↗</span></a></Nav>
+    <Nav><a className="brand" href="#top" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Book fotograf <Icon size={16}/></a></div></Nav>
     <main>
       <Story id="top" ref={story} $count={chapters.length}>
         <Stage ref={stage}>
@@ -98,36 +99,37 @@ export default function App() {
             <span className="scene-index">{pad(i+1)} <span>/ {pad(chapters.length)}</span></span>
           </Panel>)}
           <Rail aria-label="Bildekapitler">{chapters.map((c,i)=><button key={c.number} aria-label={'Vis kapittel '+pad(i+1)+': '+c.line} aria-current={active===i?'step':undefined} onClick={()=>goTo(i)}><span>{pad(i+1)}</span><i /></button>)}</Rail>
-          <div className="stage-bottom"><span>Fotografi som kjennes.</span><a href="#introduksjon">Scroll for å utforske <span>↓</span></a><span className="edition">Utvalgte øyeblikk / {new Date().getFullYear()}</span></div>
+          <div className="stage-bottom"><span>Fotografi som kjennes.</span><a href="#introduksjon">Scroll for å utforske <Icon name="down" size={24}/></a><span className="edition">Utvalgte øyeblikk / {new Date().getFullYear()}</span></div>
           <div className="story-progress" />
         </Stage>
       </Story>
       <Intro id="introduksjon">
         <span className="section-tag">01 — Et blikk på verden</span>
         <div className="intro-copy"><div><p className="intro-line">Noen bilder ser du.</p></div><div><p className="intro-line">Andre <em>kjenner du.</em></p></div></div>
-        <div className="intro-foot"><span className="asterisk" aria-hidden="true">✳</span><p>Fra hav som river til gater som lever.<br/>Mennesker, steder og de små øyeblikkene imellom.</p><a href="#arbeider">Se hele samlingen ↘</a></div>
+        <div className="intro-foot"><span className="asterisk" aria-hidden="true"><Icon name="asterisk" size={70}/></span><p>Fra hav som river til gater som lever.<br/>Mennesker, steder og de små øyeblikkene imellom.</p><a href="#arbeider">Se hele samlingen <Icon name="downRight" size={18}/></a></div>
       </Intro>
       <Archive id="arbeider">
-        <div className="archive-heading"><div><span className="section-tag">02 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}>{compact?'↗ Redaksjonell':'⊞ Kontaktark'}</button></div>
+        <div className="archive-heading"><div><span className="section-tag">02 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}><Icon name={compact ? 'diagonal' : 'grid'} size={18}/>{compact ? 'Redaksjonell' : 'Kontaktark'}</button></div>
         <Grid ref={grid} $compact={compact}>
           {photos.map((photo,i)=><Tile key={photo.id} $compact={compact} $portrait={photo.height>photo.width}>
             <div className="tile-inner"><motion.button className="photo-button" onClick={()=>setSelected(photo)} aria-label={'Åpne '+photo.title} whileHover={reduced?undefined:{scale:.985}} transition={{duration:.35}}>
               <img src={photo.thumb} srcSet={photo.thumb+' 720w, '+photo.src+' 1600w'} sizes={compact?'(max-width: 700px) 50vw, 30vw':'(max-width: 700px) 90vw, 65vw'} alt={photo.alt} loading="lazy" width={photo.width} height={photo.height} />
-              <span className="open-mark" aria-hidden="true">↗</span>
-            </motion.button><div className="photo-caption"><span>{pad(i+1)} / {photo.title}</span><span>Se fotografi ↗</span></div></div>
+              <span className="open-mark" aria-hidden="true"><Icon/></span>
+            </motion.button><div className="photo-caption"><span>{pad(i+1)} / {photo.title}</span><span>Se fotografi <Icon size={14}/></span></div></div>
           </Tile>)}
         </Grid>
       </Archive>
       <Footer className="closing">
         {photos.find(p=>p.number===21) && <img className="closing-image" src={photos.find(p=>p.number===21)!.full} alt="" loading="lazy"/>}
-        <div className="closing-shade"/><div className="closing-copy"><span>Det neste øyeblikket venter.</span><p>SE LITT<br/><em>LENGER.</em></p><a href="#top">Tilbake til begynnelsen ↑</a></div>
+        <div className="closing-shade"/><div className="closing-copy"><span>Det neste øyeblikket venter.</span><p>SE LITT<br/><em>LENGER.</em></p><a href="/kontakt/">Book fotograf <Icon/></a></div>
         <div className="footer-line"><a className="brand" href="#top">tomin<span>photo®</span></a><span>© {new Date().getFullYear()} Tomin Photo</span></div>
       </Footer>
     </main>
     <Viewer ref={dialog} onCancel={()=>setSelected(null)} onClick={event=>{if(event.target===event.currentTarget)setSelected(null)}} onKeyDown={event=>{if(event.key==='ArrowRight')step(1);if(event.key==='ArrowLeft')step(-1)}} aria-label={selected?.title ?? 'Fotografivisning'}>
-      <button className="close" onClick={()=>setSelected(null)} autoFocus>Lukk ✕</button>
-      {selected && <><img src={selected.full} alt={selected.alt}/><div className="viewer-bottom"><button onClick={()=>step(-1)} aria-label="Forrige fotografi">←</button><span>{selected.title} <small>{pad(photos.indexOf(selected)+1)} / {pad(photos.length)}</small></span><button onClick={()=>step(1)} aria-label="Neste fotografi">→</button></div></>}
+      <button className="close" onClick={()=>setSelected(null)} autoFocus>Lukk <Icon name="close" size={18}/></button>
+      {selected && <><img src={selected.full} alt={selected.alt}/><div className="viewer-bottom"><button onClick={()=>step(-1)} aria-label="Forrige fotografi"><Icon name="left"/></button><span>{selected.title} <small>{pad(photos.indexOf(selected)+1)} / {pad(photos.length)}</small></span><button onClick={()=>step(1)} aria-label="Neste fotografi"><Icon name="right"/></button></div></>}
     </Viewer>
   </div>
 }
+
 
