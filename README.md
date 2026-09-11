@@ -32,7 +32,7 @@ Barlow Condensed og DM Sans lastes fra Google Fonts med systemfonter som reserve
 
 ## Kontakt og Netlify Forms
 
-`/kontakt/` inneholder et bookingskjema, og `/takk/` er takkesiden. Netlify-konfigurasjonen bygger med `npm run build`, publiserer `dist` og støtter direkte åpning av begge adressene.
+`/kontakt/` inneholder et skjema for print, bruk av bilder og andre henvendelser, og `/takk/` er takkesiden. Netlify-konfigurasjonen bygger med `npm run build`, publiserer `dist` og støtter direkte åpning av begge adressene. Det eksisterende skjemanavnet `booking` er beholdt for kompatibilitet med Netlify. Telefon, sted og dato beholdes som skjulte felt for eldre innsendinger; `photograph` identifiserer fotografiet kunden spør om.
 
 Skjemaet heter `booking`. Den skjulte HTML-definisjonen i `index.html` har samme feltnavn som React-skjemaet i `src/Contact.tsx`, inkludert honeypot. Behold disse i samsvar ved endringer.
 

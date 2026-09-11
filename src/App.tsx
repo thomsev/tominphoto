@@ -87,7 +87,7 @@ export default function App() {
 
   return <div ref={root}>
     <a className="skip" href="#arbeider">Hopp til bildene</a>
-    <Nav><a className="brand" href="#top" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Book fotograf <Icon size={16}/></a></div></Nav>
+    <Nav><a className="brand" href="#top" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
     <main>
       <Story id="top" ref={story} $count={chapters.length}>
         <Stage ref={stage}>
@@ -121,7 +121,7 @@ export default function App() {
       </Archive>
       <Footer className="closing">
         {photos.find(p=>p.number===21) && <img className="closing-image" src={photos.find(p=>p.number===21)!.full} alt="" loading="lazy"/>}
-        <div className="closing-shade"/><div className="closing-copy"><span>Det neste øyeblikket venter.</span><p>SE LITT<br/><em>LENGER.</em></p><a href="/kontakt/">Book fotograf <Icon/></a></div>
+        <div className="closing-shade"/><div className="closing-copy"><span>Det neste øyeblikket venter.</span><p>SE LITT<br/><em>LENGER.</em></p><a href="/kontakt/">Kontakt <Icon/></a></div>
         <div className="footer-line"><a className="brand" href="#top">tomin<span>photo®</span></a><span>© {new Date().getFullYear()} Tomin Photo</span></div>
       </Footer>
     </main>
@@ -131,5 +131,6 @@ export default function App() {
     </Viewer>
   </div>
 }
+
 
 
