@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
+// Keep the reveal distance unchanged, followed by 90svh (75svh mobile) of viewing room.
 export const FilmStage = styled.section`
-  position:relative;height:220svh;background:#101211;color:#f3f1e9;scroll-margin-top:0;
+  position:relative;height:310svh;background:#101211;color:#f3f1e9;scroll-margin-top:0;
   .film-stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;}
   .film-window{position:absolute;inset:0;overflow:hidden;will-change:clip-path;}
   .film-window video{width:100%;height:100%;object-fit:cover;display:block;}
@@ -28,7 +29,7 @@ export const FilmStage = styled.section`
   &.variant-water{background:#eae9e2;color:#1c201a;.film-window{clip-path:inset(33% 13%);}.film-detail{left:auto;right:6vw;text-align:right;top:27%;color:#f3f1e9;}.film-shade{opacity:0;}}
   .water-heading{position:absolute;left:6vw;top:9%;font:600 19vw/.8 'Barlow Condensed',Impact,sans-serif;letter-spacing:-.04em;margin:0;pointer-events:none;}
   .water-reflection{position:absolute;top:67%;left:13%;width:74%;height:35%;object-fit:cover;transform:scaleY(-1);opacity:.13;filter:blur(3px);mask-image:linear-gradient(transparent,#000);pointer-events:none;}
-  @media(max-width:700px){height:200svh;.film-top,.film-bottom{font-size:9px;}.film-top{top:25px;}.film-bottom{bottom:24px;align-items:flex-end;}.film-bottom>span:first-child{max-width:52%;line-height:1.7;}.film-hint{max-width:125px;font-size:8px;line-height:1.8;}.film-title{font-size:32vw;bottom:27%;}.film-detail{top:22%;}.film-detail>span{font-size:8px;}.film-controls{bottom:14%;}.film-controls button{padding:12px 16px;}.pulse-word{font-size:42vw;}.water-heading{top:18%;font-size:25vw;}&.variant-water .film-detail{top:40%;}.clouds img{width:200%;height:130%;}.cloud-near{left:-75%;}}
+  @media(max-width:700px){height:275svh;.film-top,.film-bottom{font-size:9px;}.film-top{top:25px;}.film-bottom{bottom:24px;align-items:flex-end;}.film-bottom>span:first-child{max-width:52%;line-height:1.7;}.film-hint{max-width:125px;font-size:8px;line-height:1.8;}.film-title{font-size:32vw;bottom:27%;}.film-detail{top:22%;}.film-detail>span{font-size:8px;}.film-controls{bottom:14%;}.film-controls button{padding:12px 16px;}.pulse-word{font-size:42vw;}.water-heading{top:18%;font-size:25vw;}&.variant-water .film-detail{top:40%;}.clouds img{width:200%;height:130%;}.cloud-near{left:-75%;}}
   @media(prefers-reduced-motion:reduce){height:100svh;.film-stage{position:relative;}.film-window,&.variant-pulse .film-window,&.variant-water .film-window{clip-path:none;will-change:auto;}.clouds,.pulse-word,.film-hint,.film-progress,.water-reflection{display:none;}.film-title,.film-detail{opacity:1;}&.variant-water .film-shade{opacity:1;}.water-heading,&.variant-water .film-top,&.variant-water .film-bottom,&.variant-fog .film-top{color:#f3f1e9;}}
   &.variant-panorama{background:#11171b;background-image:radial-gradient(ellipse at 50% 45%,#567e9520,transparent 65%);.film-title{font-size:19vw;}.film-detail{top:21%;}.film-detail p{font-size:clamp(22px,2.7vw,40px);}.film-window{will-change:auto;}}
   .panorama-defs{position:absolute;pointer-events:none;}

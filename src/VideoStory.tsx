@@ -88,7 +88,8 @@ export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
       const timeline = gsap.timeline({ scrollTrigger: {
         trigger: root.current, start: 'top top', end: 'bottom bottom', scrub: .55, invalidateOnRefresh: true,
       } })
-      timeline.to('.film-progress i', { scaleX: 1, duration: 1, ease: 'none' }, 0)
+      // Reveals finish at 1.0; the last 0.75 holds the full-screen composition.
+      timeline.to('.film-progress i', { scaleX: 1, duration: 1.75, ease: 'none' }, 0)
       timeline.to('.film-hint', { opacity: 0, y: -8, duration: .12 }, .1)
       if (variant === 'airplane') {
         timeline.fromTo('.air-shade', { yPercent: 0 }, { yPercent: -105, duration: .5, ease: 'power2.inOut' }, .04)
