@@ -1,4 +1,4 @@
-# Tomin Photo
+# MelingMedia
 
 Fotografportefølje med React, TypeScript, Vite, styled-components, GSAP ScrollTrigger/Flip og Motion.
 

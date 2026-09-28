@@ -26,7 +26,7 @@ const descriptions: Record<number, [string,string]> = {
 export const photos = generated.map(photo => ({
   ...photo,
   title:descriptions[photo.number]?.[0] ?? 'Et øyeblikk',
-  alt:descriptions[photo.number]?.[1] ?? 'Fotografi fra Tomin Photos portefølje',
+  alt:descriptions[photo.number]?.[1] ?? 'Fotografi fra MelingMedias portefølje',
 }))
 export type Photo = (typeof photos)[number]
 export const chapters = [

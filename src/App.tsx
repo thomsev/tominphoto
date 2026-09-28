@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react'
 import { gsap, Flip, ScrollTrigger } from './lib/animation'
 import { photos, chapters, type Photo } from './data/photos'
 import { Icon } from './Icon'
+import VideoStory from './VideoStory'
 import { Nav, Story, Stage, Panel, Rail, Intro, Archive, Grid, Tile, Footer, Viewer } from './styles'
 
 const pad = (n:number) => String(n).padStart(2,'0')
@@ -87,7 +88,7 @@ export default function App() {
 
   return <div ref={root}>
     <a className="skip" href="#arbeider">Hopp til bildene</a>
-    <Nav><a className="brand" href="#top" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
+    <Nav><a className="brand" href="#top" aria-label="MelingMedia, forsiden">meling<span>media®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
     <main>
       <Story id="top" ref={story} $count={chapters.length}>
         <Stage ref={stage}>
@@ -108,8 +109,9 @@ export default function App() {
         <div className="intro-copy"><div><p className="intro-line">Noen bilder ser du.</p></div><div><p className="intro-line">Andre <em>kjenner du.</em></p></div></div>
         <div className="intro-foot"><span className="asterisk" aria-hidden="true"><Icon name="asterisk" size={70}/></span><p>Fra hav som river til gater som lever.<br/>Mennesker, steder og de små øyeblikkene imellom.</p><a href="#arbeider">Se hele samlingen <Icon name="downRight" size={18}/></a></div>
       </Intro>
+      <VideoStory />
       <Archive id="arbeider">
-        <div className="archive-heading"><div><span className="section-tag">02 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}><Icon name={compact ? 'diagonal' : 'grid'} size={18}/>{compact ? 'Redaksjonell' : 'Kontaktark'}</button></div>
+        <div className="archive-heading"><div><span className="section-tag">03 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}><Icon name={compact ? 'diagonal' : 'grid'} size={18}/>{compact ? 'Redaksjonell' : 'Kontaktark'}</button></div>
         <Grid ref={grid} $compact={compact}>
           {photos.map((photo,i)=><Tile key={photo.id} $compact={compact} $portrait={photo.height>photo.width}>
             <div className="tile-inner"><motion.button className="photo-button" onClick={()=>setSelected(photo)} aria-label={'Åpne '+photo.title} whileHover={reduced?undefined:{scale:.985}} transition={{duration:.35}}>
@@ -122,7 +124,7 @@ export default function App() {
       <Footer className="closing">
         {photos.find(p=>p.number===21) && <img className="closing-image" src={photos.find(p=>p.number===21)!.full} alt="" loading="lazy"/>}
         <div className="closing-shade"/><div className="closing-copy"><span>Det neste øyeblikket venter.</span><p>SE LITT<br/><em>LENGER.</em></p><a href="/kontakt/">Kontakt <Icon/></a></div>
-        <div className="footer-line"><a className="brand" href="#top">tomin<span>photo®</span></a><span>© {new Date().getFullYear()} Tomin Photo</span></div>
+        <div className="footer-line"><a className="brand" href="#top">meling<span>media®</span></a><span>© {new Date().getFullYear()} MelingMedia</span></div>
       </Footer>
     </main>
     <Viewer ref={dialog} onCancel={()=>setSelected(null)} onClick={event=>{if(event.target===event.currentTarget)setSelected(null)}} onKeyDown={event=>{if(event.key==='ArrowRight')step(1);if(event.key==='ArrowLeft')step(-1)}} aria-label={selected?.title ?? 'Fotografivisning'}>
