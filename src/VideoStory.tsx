@@ -1,12 +1,29 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { gsap, ScrollTrigger } from './lib/animation'
 import { videos } from './data/videos'
 import { FilmStage, Cinema } from './filmStyles'
+
+const panoramaShapes = [
+  '.07,.32 .31,.23 .31,.75 .07,.84',
+  '.365,.17 .635,.17 .635,.81 .365,.81',
+  '.69,.23 .93,.32 .93,.84 .69,.75',
+]
+const panoramaAligned = [
+  '.07,.18 .345,.18 .345,.82 .07,.82',
+  '.363,.18 .637,.18 .637,.82 .363,.82',
+  '.655,.18 .93,.18 .93,.82 .655,.82',
+]
+const panoramaOpen = [
+  '0,0 .334,0 .334,1 0,1',
+  '.333,0 .667,0 .667,1 .333,1',
+  '.666,0 1,0 1,1 .666,1',
+]
 
 type Variant = 'fog' | 'pulse' | 'water' | 'panorama'
 export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
   const index = variant === 'fog' ? 0 : variant === 'pulse' ? 1 : variant === 'water' ? 2 : 3
   const film = videos[index]
+  const clipId = `panorama-${useId().replace(/:/g, '')}`
   const root = useRef<HTMLElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const dialog = useRef<HTMLDialogElement>(null)
@@ -69,11 +86,16 @@ export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
       timeline.to('.film-progress i', { scaleX: 1, duration: 1, ease: 'none' }, 0)
       timeline.to('.film-hint', { opacity: 0, y: -8, duration: .12 }, .1)
       if (variant === 'panorama') {
-        timeline.fromTo('.film-window', { clipPath: 'inset(19% 10% 19% 10% round 3px)' }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', duration: .65, ease: 'power2.inOut' }, .13)
-        timeline.to('.panorama-divider', { scaleX: 0, duration: .45, ease: 'power2.inOut' }, .2)
-        timeline.to('.panorama-word', { xPercent: -18, opacity: 0, duration: .45 }, .1)
-        timeline.fromTo('.film-title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .25 }, .57)
-        timeline.fromTo('.film-detail', { opacity: 0 }, { opacity: 1, duration: .2 }, .65)
+        panoramaShapes.forEach((shape, i) => {
+          timeline.fromTo(`.panorama-pane-${i}`, { attr: { points: shape } }, { attr: { points: panoramaAligned[i] }, duration: .33, ease: 'power2.inOut' }, .05)
+          timeline.to(`.panorama-pane-${i}`, { attr: { points: panoramaOpen[i] }, duration: .38, ease: 'power3.inOut' }, .38)
+        })
+        timeline.fromTo('.film-window video', { scale: 1.1 }, { scale: 1, duration: .76, ease: 'power1.inOut' }, 0)
+        timeline.to('.panorama-word', { yPercent: 35, opacity: 0, duration: .4 }, .18)
+        timeline.to('.panorama-intro,.panorama-notes', { opacity: 0, y: -18, duration: .22 }, .13)
+        timeline.to('.panorama-rims', { opacity: 0, duration: .15 }, .55)
+        timeline.fromTo('.film-title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .25 }, .6)
+        timeline.fromTo('.film-detail', { opacity: 0 }, { opacity: 1, duration: .2 }, .68)
       } else if (variant === 'pulse') {
         timeline.fromTo('.film-window', { clipPath: initialCup }, { clipPath: 'inset(0px 0px 0px 0px round 0px 0px 0px 0px)', duration: .56, ease: 'power3.inOut' }, .12)
         timeline.to('.pulse-word', { opacity: 0, duration: .28 }, .3)
@@ -110,16 +132,20 @@ export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
   return <>
     <FilmStage ref={root} id={variant === 'fog' ? 'filmer' : `film-${variant}`} className={`variant-${variant}`} aria-labelledby={`film-title-${variant}`}>
       <div className="film-stage">
+        {variant === 'panorama' && <>
+          <svg className="panorama-defs" width="0" height="0" aria-hidden="true"><defs><clipPath id={clipId} clipPathUnits="objectBoundingBox">{panoramaShapes.map((points, i) => <polygon key={i} className={`panorama-pane-${i}`} points={points} />)}</clipPath></defs></svg>
+          <div className="panorama-word" aria-hidden="true">UTSIKT.</div>
+          <div className="panorama-intro" aria-hidden="true"><span>ET VINDU ER BARE BEGYNNELSEN.</span><p>Se litt <em>lenger.</em></p></div>
+        </>}
         {variant === 'pulse' && <div className="pulse-word" aria-hidden="true"><span>P</span><svg className="pulse-u" viewBox="0 0 200 350"><path d="M10 0H60V245Q60 295 100 295Q140 295 140 245V0H190V245Q190 350 100 350Q10 350 10 245Z" /></svg><span>LS<span className="pulse-dot">.</span></span></div>}
         {variant === 'water' && <img className="water-reflection" src={film.poster} alt="" loading="lazy" />}
-        <div className="film-window">
+        <div className="film-window" style={variant === 'panorama' ? { clipPath: reduced ? 'none' : `url(#${clipId})` } : undefined}>
           <video ref={video} src={loaded ? film.src : undefined} poster={film.poster} muted playsInline loop preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)} aria-label={film.line} />
           <div className="film-shade" />
-          {variant === 'panorama' && <div className="panorama-dividers" aria-hidden="true"><i className="panorama-divider" /><i className="panorama-divider" /></div>}
           <div className="film-detail"><span>{['OVER SKYENE', 'MELLOM AVGANG OG ANKOMST', 'ET LEVENDE FOTOGRAFI', 'UTENFOR VINDUET'][index]}</span><p>{variant === 'fog' ? <>Et annet<br />perspektiv.</> : variant === 'panorama' ? <>Verden åpner seg.</> : variant === 'water' ? <>Bare her.<br />Bare nå.</> : <>Tusen retninger.<br />Ett øyeblikk.</>}</p></div>
           {variant !== 'water' && <h2 className="film-title" id={`film-title-${variant}`}>{film.word.slice(0, -1)}<span>.</span></h2>}
         </div>
-        {variant === 'panorama' && <div className="panorama-word" aria-hidden="true">UTSIKT.</div>}
+        {variant === 'panorama' && <><svg className="panorama-rims" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">{panoramaShapes.map((points, i) => <polygon key={i} className={`panorama-pane-${i}`} points={points} fill="none" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />)}</svg><div className="panorama-notes" aria-hidden="true"><span>01 / ET GLIMT</span><span>02 / ET ØYEBLIKK</span><span>03 / EN HEL VERDEN</span></div></>}
         {variant === 'fog' && <div className="clouds" aria-hidden="true"><div className="fog-veil" /><img className="cloud-far" src="/textures/clouds.svg" alt="" /><img className="cloud-near" src="/textures/clouds.svg" alt="" /></div>}
         {variant === 'water' && <h2 className="water-heading" id={`film-title-${variant}`}>STILLE.</h2>}
         <div className="film-top"><span>0{index + 1} / {['HØYDE', 'BEVEGELSE', 'RO', 'PERSPEKTIV'][index]}</span><span className="film-signature"><i /> MELINGMEDIA FILM</span></div>
