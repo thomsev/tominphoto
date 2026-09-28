@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react'
 import { gsap, Flip, ScrollTrigger } from './lib/animation'
 import { photos, chapters, type Photo } from './data/photos'
 import { Icon } from './Icon'
+import VideoStory from './VideoStory'
 import { Nav, Story, Stage, Panel, Rail, Intro, Archive, Grid, Tile, Footer, Viewer } from './styles'
 
 const pad = (n:number) => String(n).padStart(2,'0')
@@ -108,8 +109,9 @@ export default function App() {
         <div className="intro-copy"><div><p className="intro-line">Noen bilder ser du.</p></div><div><p className="intro-line">Andre <em>kjenner du.</em></p></div></div>
         <div className="intro-foot"><span className="asterisk" aria-hidden="true"><Icon name="asterisk" size={70}/></span><p>Fra hav som river til gater som lever.<br/>Mennesker, steder og de små øyeblikkene imellom.</p><a href="#arbeider">Se hele samlingen <Icon name="downRight" size={18}/></a></div>
       </Intro>
+      <VideoStory />
       <Archive id="arbeider">
-        <div className="archive-heading"><div><span className="section-tag">02 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}><Icon name={compact ? 'diagonal' : 'grid'} size={18}/>{compact ? 'Redaksjonell' : 'Kontaktark'}</button></div>
+        <div className="archive-heading"><div><span className="section-tag">03 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}><Icon name={compact ? 'diagonal' : 'grid'} size={18}/>{compact ? 'Redaksjonell' : 'Kontaktark'}</button></div>
         <Grid ref={grid} $compact={compact}>
           {photos.map((photo,i)=><Tile key={photo.id} $compact={compact} $portrait={photo.height>photo.width}>
             <div className="tile-inner"><motion.button className="photo-button" onClick={()=>setSelected(photo)} aria-label={'Åpne '+photo.title} whileHover={reduced?undefined:{scale:.985}} transition={{duration:.35}}>
