@@ -118,7 +118,7 @@ export default function App() {
               <img src={photo.thumb} srcSet={photo.thumb+' 720w, '+photo.src+' 1600w'} sizes={compact?'(max-width: 700px) 50vw, 30vw':'(max-width: 700px) 90vw, 65vw'} alt={photo.alt} loading="lazy" width={photo.width} height={photo.height} />
               <span className="open-mark" aria-hidden="true"><Icon/></span>
             </motion.button><div className="photo-caption"><span>{pad(i+1)} / {photo.title}</span><span>Se fotografi <Icon size={14}/></span></div></div>
-          </Tile>{(i === 6 || i === 13) && <div className="film-break"><VideoStory variant={i === 6 ? 'pulse' : 'water'} /></div>}</Fragment>)}
+          </Tile>{(i === 6 || i === 13 || i === 20) && <div className="film-break"><VideoStory variant={i === 6 ? 'pulse' : i === 13 ? 'water' : 'panorama'} /></div>}</Fragment>)}
         </Grid>
       </Archive>
       <Footer className="closing">
