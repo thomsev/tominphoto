@@ -19,9 +19,9 @@ const panoramaOpen = [
   '.666,0 1,0 1,1 .666,1',
 ]
 
-type Variant = 'fog' | 'pulse' | 'water' | 'panorama'
+type Variant = 'fog' | 'pulse' | 'water' | 'panorama' | 'airplane'
 export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
-  const index = variant === 'fog' ? 0 : variant === 'pulse' ? 1 : variant === 'water' ? 2 : 3
+  const index = variant === 'fog' ? 0 : variant === 'pulse' ? 1 : variant === 'water' ? 2 : variant === 'panorama' ? 3 : 4
   const film = videos[index]
   const clipId = `panorama-${useId().replace(/:/g, '')}`
   const root = useRef<HTMLElement>(null)
@@ -80,12 +80,25 @@ export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
         const bottom = box.height - (top + cup.height * 295 / 350)
         return `inset(${top}px ${right}px ${bottom}px ${left}px round 0px 0px ${cup.width * .2}px ${cup.width * .2}px)`
       }
+      const initialAirWindow = () => {
+        const frame = stage.querySelector('.air-measure')!.getBoundingClientRect()
+        const box = stage.getBoundingClientRect()
+        return `inset(${frame.top - box.top}px ${box.right - frame.right}px ${box.bottom - frame.bottom}px ${frame.left - box.left}px round ${frame.width * .44}px / ${frame.height * .28}px)`
+      }
       const timeline = gsap.timeline({ scrollTrigger: {
         trigger: root.current, start: 'top top', end: 'bottom bottom', scrub: .55, invalidateOnRefresh: true,
       } })
       timeline.to('.film-progress i', { scaleX: 1, duration: 1, ease: 'none' }, 0)
       timeline.to('.film-hint', { opacity: 0, y: -8, duration: .12 }, .1)
-      if (variant === 'panorama') {
+      if (variant === 'airplane') {
+        timeline.fromTo('.air-shade', { yPercent: 0 }, { yPercent: -105, duration: .5, ease: 'power2.inOut' }, .04)
+        timeline.to('.air-cabin-copy', { opacity: 0, y: -15, duration: .2 }, .35)
+        timeline.to('.air-frame', { opacity: 0, duration: .18 }, .58)
+        timeline.fromTo('.film-window', { clipPath: initialAirWindow }, { clipPath: 'inset(0px 0px 0px 0px round 0px / 0px)', duration: .36, ease: 'power2.inOut' }, .59)
+        timeline.fromTo('.film-title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .2 }, .77)
+        timeline.fromTo('.film-detail', { opacity: 0 }, { opacity: 1, duration: .2 }, .77)
+        timeline.to('.film-top,.film-bottom', { color: '#f3f1e9', textShadow: '0 2px 6px #000, 0 0 20px #0008', duration: .2 }, .64)
+      } else if (variant === 'panorama') {
         panoramaShapes.forEach((shape, i) => {
           timeline.fromTo(`.panorama-pane-${i}`, { attr: { points: shape } }, { attr: { points: panoramaAligned[i] }, duration: .33, ease: 'power2.inOut' }, .05)
           timeline.to(`.panorama-pane-${i}`, { attr: { points: panoramaOpen[i] }, duration: .38, ease: 'power3.inOut' }, .38)
@@ -142,15 +155,17 @@ export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
         <div className="film-window" style={variant === 'panorama' ? { clipPath: reduced ? 'none' : `url(#${clipId})` } : undefined}>
           <video ref={video} src={loaded ? film.src : undefined} poster={film.poster} muted playsInline loop preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)} aria-label={film.line} />
           <div className="film-shade" />
-          <div className="film-detail"><span>{['OVER SKYENE', 'MELLOM AVGANG OG ANKOMST', 'ET LEVENDE FOTOGRAFI', 'UTENFOR VINDUET'][index]}</span><p>{variant === 'fog' ? <>Et annet<br />perspektiv.</> : variant === 'panorama' ? <>Verden åpner seg.</> : variant === 'water' ? <>Bare her.<br />Bare nå.</> : <>Tusen retninger.<br />Ett øyeblikk.</>}</p></div>
+          {variant === 'airplane' && <div className="air-shade" aria-hidden="true"><span className="air-handle" /><span className="air-shade-label">LØFT BLIKKET</span></div>}
+          <div className="film-detail"><span>{['OVER SKYENE', 'MELLOM AVGANG OG ANKOMST', 'ET LEVENDE FOTOGRAFI', 'UTENFOR VINDUET', 'FØR VERDEN LETTER'][index]}</span><p>{variant === 'fog' ? <>Et annet<br />perspektiv.</> : variant === 'airplane' ? <>Reisen begynner<br />med et blikk.</> : variant === 'panorama' ? <>Verden åpner seg.</> : variant === 'water' ? <>Bare her.<br />Bare nå.</> : <>Tusen retninger.<br />Ett øyeblikk.</>}</p></div>
           {variant !== 'water' && <h2 className="film-title" id={`film-title-${variant}`}>{film.word.slice(0, -1)}<span>.</span></h2>}
         </div>
         {variant === 'panorama' && <><svg className="panorama-rims" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">{panoramaShapes.map((points, i) => <polygon key={i} className={`panorama-pane-${i}`} points={points} fill="none" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />)}</svg><div className="panorama-notes" aria-hidden="true"><span>01 / ET GLIMT</span><span>02 / ET ØYEBLIKK</span><span>03 / EN HEL VERDEN</span></div></>}
         {variant === 'fog' && <div className="clouds" aria-hidden="true"><div className="fog-veil" /><img className="cloud-far" src="/textures/clouds.svg" alt="" /><img className="cloud-near" src="/textures/clouds.svg" alt="" /></div>}
+        {variant === 'airplane' && <><div className="air-measure" aria-hidden="true" /><div className="air-frame" aria-hidden="true" /><div className="air-cabin-copy" aria-hidden="true"><span>DIN PLASS VED VINDUET.</span><p>Snart <em>avsted.</em></p></div></>}
         {variant === 'water' && <h2 className="water-heading" id={`film-title-${variant}`}>STILLE.</h2>}
-        <div className="film-top"><span>0{index + 1} / {['HØYDE', 'BEVEGELSE', 'RO', 'PERSPEKTIV'][index]}</span><span className="film-signature"><i /> MELINGMEDIA FILM</span></div>
+        <div className="film-top"><span>0{index + 1} / {['HØYDE', 'BEVEGELSE', 'RO', 'PERSPEKTIV', 'AVGANG'][index]}</span><span className="film-signature"><i /> MELINGMEDIA FILM</span></div>
         <div className="film-controls"><button onClick={toggle} disabled={!loaded || failed} aria-label={playing ? 'Pause video' : 'Spill av video'}><span aria-hidden="true">{playing ? 'Ⅱ' : '▷'}</span></button><button ref={opener} onClick={() => { setLoaded(true); setOpened(true); dialog.current?.showModal() }}>Se filmen <span aria-hidden="true">↗</span></button></div>
-        <div className="film-bottom"><span>{failed ? 'Filmen kunne ikke lastes.' : film.line}</span><span className="film-hint">{variant === 'pulse' ? 'ET ØYEBLIKK INNE I BOKSTAVEN' : variant === 'fog' ? 'GJENNOM TÅKEN' : variant === 'panorama' ? 'ÅPNE UTSIKTEN' : 'GI ØYEBLIKKET PLASS'} ↓</span></div>
+        <div className="film-bottom"><span>{failed ? 'Filmen kunne ikke lastes.' : film.line}</span><span className="film-hint">{variant === 'pulse' ? 'ET ØYEBLIKK INNE I BOKSTAVEN' : variant === 'fog' ? 'GJENNOM TÅKEN' : variant === 'panorama' ? 'ÅPNE UTSIKTEN' : variant === 'airplane' ? 'SCROLL FOR Å ÅPNE VINDUET' : 'GI ØYEBLIKKET PLASS'} ↓</span></div>
         <div className="film-progress" aria-hidden="true"><i /></div>
       </div>
     </FilmStage>

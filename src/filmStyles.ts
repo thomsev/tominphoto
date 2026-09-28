@@ -5,10 +5,10 @@ export const FilmStage = styled.section`
   .film-stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;}
   .film-window{position:absolute;inset:0;overflow:hidden;will-change:clip-path;}
   .film-window video{width:100%;height:100%;object-fit:cover;display:block;}
-  .film-shade{position:absolute;inset:0;background:linear-gradient(180deg,#07100c55,transparent 32%,#07100c18 50%,#07100c99);pointer-events:none;}
+  .film-shade{position:absolute;inset:0;background:linear-gradient(180deg,#030a1277,transparent 35%,#030a1220 53%,#030a12b3);pointer-events:none;}
   .film-title{position:absolute;left:5vw;bottom:15%;font:600 clamp(110px,23vw,350px)/.8 'Barlow Condensed',Impact,sans-serif;letter-spacing:-.04em;margin:0;opacity:0;pointer-events:none;}
   .film-title span{color:var(--accent);font:inherit;margin:0;vertical-align:baseline;}
-  .film-detail{position:absolute;left:6vw;top:23%;opacity:0;text-shadow:0 2px 25px #0005;}
+  .film-detail{position:absolute;left:6vw;top:23%;opacity:0;text-shadow:0 2px 4px #000c,0 4px 20px #000a;isolation:isolate;}
   .film-detail>span{font-size:10px;letter-spacing:.17em;}.film-detail p{font-size:clamp(24px,3vw,44px);line-height:1.12;letter-spacing:-.035em;margin:18px 0;}
   .film-top,.film-bottom{position:absolute;left:6vw;right:6vw;display:flex;justify-content:space-between;align-items:center;gap:25px;font-size:11px;letter-spacing:.07em;z-index:3;}
   .film-top{top:32px;}.film-bottom{bottom:29px;}.film-signature{display:flex;align-items:center;gap:9px;}.film-signature i{width:5px;height:5px;border-radius:50%;background:currentColor;}
@@ -30,14 +30,29 @@ export const FilmStage = styled.section`
   .water-reflection{position:absolute;top:67%;left:13%;width:74%;height:35%;object-fit:cover;transform:scaleY(-1);opacity:.13;filter:blur(3px);mask-image:linear-gradient(transparent,#000);pointer-events:none;}
   @media(max-width:700px){height:200svh;.film-top,.film-bottom{font-size:9px;}.film-top{top:25px;}.film-bottom{bottom:24px;align-items:flex-end;}.film-bottom>span:first-child{max-width:52%;line-height:1.7;}.film-hint{max-width:125px;font-size:8px;line-height:1.8;}.film-title{font-size:32vw;bottom:27%;}.film-detail{top:22%;}.film-detail>span{font-size:8px;}.film-controls{bottom:14%;}.film-controls button{padding:12px 16px;}.pulse-word{font-size:42vw;}.water-heading{top:18%;font-size:25vw;}&.variant-water .film-detail{top:40%;}.clouds img{width:200%;height:130%;}.cloud-near{left:-75%;}}
   @media(prefers-reduced-motion:reduce){height:100svh;.film-stage{position:relative;}.film-window,&.variant-pulse .film-window,&.variant-water .film-window{clip-path:none;will-change:auto;}.clouds,.pulse-word,.film-hint,.film-progress,.water-reflection{display:none;}.film-title,.film-detail{opacity:1;}&.variant-water .film-shade{opacity:1;}.water-heading,&.variant-water .film-top,&.variant-water .film-bottom,&.variant-fog .film-top{color:#f3f1e9;}}
-  &.variant-panorama{background:#151513;background-image:radial-gradient(ellipse at 50% 45%,#88744e25,transparent 65%);.film-title{font-size:19vw;}.film-detail{top:21%;}.film-detail p{font-size:clamp(22px,2.7vw,40px);}.film-window{will-change:auto;}}
+  &.variant-panorama{background:#11171b;background-image:radial-gradient(ellipse at 50% 45%,#567e9520,transparent 65%);.film-title{font-size:19vw;}.film-detail{top:21%;}.film-detail p{font-size:clamp(22px,2.7vw,40px);}.film-window{will-change:auto;}}
   .panorama-defs{position:absolute;pointer-events:none;}
-  .panorama-rims{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:#fff3dc70;filter:drop-shadow(0 5px 18px #000a);}
-  .panorama-word{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);font:600 25vw/.8 'Barlow Condensed',Impact,sans-serif;letter-spacing:-.045em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px #e1d1ab30;pointer-events:none;}
-  .panorama-intro{position:absolute;left:7%;top:11%;pointer-events:none;}.panorama-intro>span{font-size:9px;letter-spacing:.18em;color:#c5baa5;}.panorama-intro p{font-size:clamp(26px,3.6vw,58px);letter-spacing:-.05em;line-height:1.15;margin:13px 0;}.panorama-intro em{font-family:Georgia,serif;font-weight:400;color:#d6c5a4;}
-  .panorama-notes{position:absolute;left:7%;right:7%;bottom:12%;display:flex;justify-content:space-between;pointer-events:none;font-size:9px;letter-spacing:.13em;color:#b6ae9d;}
+  .panorama-rims{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:#e1f1fa70;filter:drop-shadow(0 5px 18px #000a);}
+  .panorama-word{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);font:600 25vw/.8 'Barlow Condensed',Impact,sans-serif;letter-spacing:-.045em;white-space:nowrap;color:transparent;-webkit-text-stroke:1px #dbe8ee30;pointer-events:none;}
+  .panorama-intro{position:absolute;left:7%;top:11%;pointer-events:none;}.panorama-intro>span{font-size:9px;letter-spacing:.18em;color:#b9c9d0;}.panorama-intro p{font-size:clamp(26px,3.6vw,58px);letter-spacing:-.05em;line-height:1.15;margin:13px 0;}.panorama-intro em{font-family:Georgia,serif;font-weight:400;color:#d5e4eb;}
+  .panorama-notes{position:absolute;left:7%;right:7%;bottom:12%;display:flex;justify-content:space-between;pointer-events:none;font-size:9px;letter-spacing:.13em;color:#b4c4cb;}
   @media(max-width:700px){.panorama-intro{top:8%;left:7%;}.panorama-intro>span{font-size:7px;}.panorama-intro p{font-size:24px;margin-top:8px;}.panorama-word{font-size:29vw;bottom:23%;}.panorama-notes{display:none;}&.variant-panorama .film-title{font-size:24vw;bottom:28%;}}
   @media(prefers-reduced-motion:reduce){.panorama-rims,.panorama-word,.panorama-intro,.panorama-notes{display:none;}}
+
+  .film-title{text-shadow:0 2px 4px #0008,0 8px 32px #0006;}
+  .film-detail::before{content:'';position:absolute;inset:-22px -30px;z-index:-1;background:radial-gradient(ellipse,#030a1260,transparent 72%);pointer-events:none;}
+  .film-top,.film-bottom{text-shadow:0 1px 3px #000c,0 2px 12px #0009;}
+  &.variant-fog .film-top,&.variant-water .film-top,&.variant-water .film-bottom{text-shadow:0 1px 4px #0005;}
+  .water-heading{text-shadow:0 3px 16px #0004;}
+  &.variant-airplane{background:radial-gradient(ellipse at 50% 40%,#fff 0%,#dbe1e4 56%,#aebbc3 100%);color:#25323a;.film-window{clip-path:inset(50% 50%);}.film-detail,.film-title{color:#f3f1e9;}.film-top,.film-bottom{text-shadow:none;}.film-controls{bottom:12%;}.film-title{font-size:19vw;}}
+  .air-measure,.air-frame{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:clamp(260px,34vw,470px);height:min(65svh,620px);border-radius:44% / 28%;pointer-events:none;}
+  .air-measure{visibility:hidden;}.air-frame{box-shadow:inset 0 3px 12px #030b1266,0 0 0 3px #71828b,0 0 0 12px #c5cdd1,0 0 0 14px #f7fafb,0 0 0 26px #e5e9eb,0 15px 38px 30px #5d707633;}
+  .air-shade{position:absolute;inset:0 0 20%;background:linear-gradient(100deg,#bcc8cd,#e9edef 36%,#f4f6f7 50%,#d5dee2 78%,#a6b7c0);box-shadow:0 8px 18px #0009;border-radius:0 0 12% 12%;z-index:1;}
+  .air-handle{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);width:76px;height:13px;border-radius:20px;background:linear-gradient(#8d9fa9,#d1dbe0);box-shadow:inset 0 2px 4px #3b4e5b99,0 2px 1px #fff;}
+  .air-shade-label{position:absolute;top:52%;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.2em;color:#657983;white-space:nowrap;}
+  .air-cabin-copy{position:absolute;left:6vw;top:30%;pointer-events:none;}.air-cabin-copy>span{font-size:9px;letter-spacing:.14em;}.air-cabin-copy p{font-size:clamp(24px,3.3vw,48px);line-height:1.1;letter-spacing:-.04em;margin:14px 0;}.air-cabin-copy em{display:block;font-family:Georgia,serif;font-weight:400;}
+  @media(max-width:700px){.air-measure,.air-frame{width:64vw;min-width:220px;height:53svh;top:46%;}.air-cabin-copy{top:9%;left:6vw;}.air-cabin-copy p{font-size:25px;margin:8px 0;}.air-cabin-copy em{display:inline;}.air-cabin-copy>span{font-size:7px;}&.variant-airplane .film-title{font-size:24vw;bottom:27%;}.air-shade{bottom:27%;}.air-shade-label{font-size:8px;top:51%;}.air-handle{width:60px;height:11px;}}
+  @media(prefers-reduced-motion:reduce){.air-shade,.air-frame,.air-measure,.air-cabin-copy{display:none;}&.variant-airplane .film-window{clip-path:none!important;}&.variant-airplane .film-top,&.variant-airplane .film-bottom{color:#f3f1e9;text-shadow:0 2px 5px #000;}}
 
 `
 
