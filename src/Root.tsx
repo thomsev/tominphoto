@@ -4,10 +4,10 @@ const App = lazy(() => import('./App.tsx'))
 const Contact = lazy(() => import('./Contact.tsx'))
 const path = window.location.pathname.replace(/\/+$/, '')
 const contact = path === '/kontakt' || path === '/takk'
-if (contact) document.title = path === '/takk' ? 'Takk for forespørselen — Tomin Photo' : 'Kontakt — Tomin Photo'
+if (contact) document.title = path === '/takk' ? 'Takk for forespørselen — MelingMedia' : 'Kontakt — MelingMedia'
 
 export default function Root() {
-  return <Suspense fallback={<div role="status" style={{ padding: '15vh 6vw', minHeight: '100svh' }}>Tomin Photo · Laster …</div>}>
+  return <Suspense fallback={<div role="status" style={{ padding: '15vh 6vw', minHeight: '100svh' }}>MelingMedia · Laster …</div>}>
     {contact ? <Contact thanks={path === '/takk'} /> : <App />}
   </Suspense>
 }

@@ -23,13 +23,13 @@ export default function Contact({ thanks = false }: { thanks?: boolean }) {
   return <ContactPage>
     <a className="skip" href="#kontakt">Hopp til kontaktskjemaet</a>
     <Nav aria-label="Hovedmeny">
-      <a className="brand" href="/" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a>
+      <a className="brand" href="/" aria-label="MelingMedia, forsiden">meling<span>media®</span></a>
       <div className="nav-links"><a className="archive-link" href="/#arbeider">Bildearkiv</a><a className="booking-link" href="/kontakt/" aria-current="page">Kontakt <Icon size={16} /></a></div>
     </Nav>
     <ContactVisual>
       {photo && <img src={photo.src} srcSet={`${photo.src} 1600w, ${photo.full} 2560w`} sizes="(max-width: 850px) 100vw, 46vw" alt={photo.alt} fetchPriority="high" />}
       <div className="visual-shade" />
-      <div className="visual-copy"><span>TOMIN PHOTO / PRINT &amp; HENVENDELSER</span><p>ET<br/>ØYEBLIKK.<br/><em>DIN VEGG.</em></p><div className="visual-bottom"><span>Et fotografi å leve med.</span><Icon name="downRight" size={32}/></div></div>
+      <div className="visual-copy"><span>MELINGMEDIA / PRINT &amp; HENVENDELSER</span><p>ET<br/>ØYEBLIKK.<br/><em>DIN VEGG.</em></p><div className="visual-bottom"><span>Et fotografi å leve med.</span><Icon name="downRight" size={32}/></div></div>
     </ContactVisual>
     <ContactContent id="kontakt">
       <motion.div initial={reduced ? false : { opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, ease: 'easeOut' }}>
@@ -56,7 +56,7 @@ export default function Contact({ thanks = false }: { thanks?: boolean }) {
             {preview && <p role="status" className="preview-note">Lokal forhåndsvisning: Ingenting er sendt. Innsending blir tilgjengelig på Netlify når skjemamottak er aktivert.</p>}
           </BookingForm>
         </>}
-        <ContactFooter><a href="/">Tomin Photo</a><span>© {new Date().getFullYear()}</span></ContactFooter>
+        <ContactFooter><a href="/">MelingMedia</a><span>© {new Date().getFullYear()}</span></ContactFooter>
       </motion.div>
     </ContactContent>
   </ContactPage>

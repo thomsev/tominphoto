@@ -87,7 +87,7 @@ export default function App() {
 
   return <div ref={root}>
     <a className="skip" href="#arbeider">Hopp til bildene</a>
-    <Nav><a className="brand" href="#top" aria-label="Tomin Photo, forsiden">tomin<span>photo®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
+    <Nav><a className="brand" href="#top" aria-label="MelingMedia, forsiden">meling<span>media®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
     <main>
       <Story id="top" ref={story} $count={chapters.length}>
         <Stage ref={stage}>
@@ -122,7 +122,7 @@ export default function App() {
       <Footer className="closing">
         {photos.find(p=>p.number===21) && <img className="closing-image" src={photos.find(p=>p.number===21)!.full} alt="" loading="lazy"/>}
         <div className="closing-shade"/><div className="closing-copy"><span>Det neste øyeblikket venter.</span><p>SE LITT<br/><em>LENGER.</em></p><a href="/kontakt/">Kontakt <Icon/></a></div>
-        <div className="footer-line"><a className="brand" href="#top">tomin<span>photo®</span></a><span>© {new Date().getFullYear()} Tomin Photo</span></div>
+        <div className="footer-line"><a className="brand" href="#top">meling<span>media®</span></a><span>© {new Date().getFullYear()} MelingMedia</span></div>
       </Footer>
     </main>
     <Viewer ref={dialog} onCancel={()=>setSelected(null)} onClick={event=>{if(event.target===event.currentTarget)setSelected(null)}} onKeyDown={event=>{if(event.key==='ArrowRight')step(1);if(event.key==='ArrowLeft')step(-1)}} aria-label={selected?.title ?? 'Fotografivisning'}>
