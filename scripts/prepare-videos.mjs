@@ -7,7 +7,7 @@ import path from 'node:path'
 const ffmpeg = process.env.FFMPEG || 'ffmpeg'
 const source = 'src/assets/video'
 const output = 'public/films'
-const names = ['Flyålasskaos.mp4']
+const names = ['Fly gjennom tåke.mp4', 'Flyålasskaos.mp4', 'sjøbasseng.mp4']
 const manifest = []
 const files = readdirSync(source)
 mkdirSync(output, { recursive: true })
@@ -15,9 +15,9 @@ for (const [index, name] of names.entries()) {
   const actual = files.find(file => file.normalize('NFC') === name)
   if (!actual) throw new Error(`Missing video: ${name}`)
   const input = path.join(source, actual)
-  const destination = path.join(output, `film-6`)
+  const destination = path.join(output, `film-${[1, 6, 5][index]}`)
   for (const args of [
-    ['-i', input, '-an', '-c:v', 'libx264', '-preset', 'fast', '-crf', '18', '-g', '1', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', `${destination}.mp4`],
+    ['-i', input, '-an', '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-g', '50', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', `${destination}.mp4`],
     ['-i', input, '-frames:v', '1', '-q:v', '2', `${destination}.jpg`],
   ]) {
     const result = spawnSync(ffmpeg, ['-hide_banner', '-loglevel', 'error', '-y', ...args], { stdio: 'inherit' })

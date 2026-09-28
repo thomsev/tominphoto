@@ -1,101 +1,129 @@
 import { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { ScrollTrigger } from './lib/animation'
+import { gsap, ScrollTrigger } from './lib/animation'
 import { videos } from './data/videos'
+import { FilmStage, Cinema } from './filmStyles'
 
-function Film({ film, index }: { film: (typeof videos)[number]; index: number }) {
-  const section = useRef<HTMLElement>(null)
+type Variant = 'fog' | 'pulse' | 'water'
+export default function VideoStory({ variant = 'fog' }: { variant?: Variant }) {
+  const index = variant === 'fog' ? 0 : variant === 'pulse' ? 1 : 2
+  const film = videos[index]
+  const root = useRef<HTMLElement>(null)
   const video = useRef<HTMLVideoElement>(null)
-  const progress = useRef<HTMLDivElement>(null)
-  const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  const [load, setLoad] = useState(false)
+  const dialog = useRef<HTMLDialogElement>(null)
+  const cinema = useRef<HTMLVideoElement>(null)
+  const opener = useRef<HTMLButtonElement>(null)
+  const [loaded, setLoaded] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [playing, setPlaying] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const [opened, setOpened] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [reduced, setReduced] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches)
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const update = () => { setReduced(media.matches); video.current?.pause() }
+    const media = matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setReduced(media.matches)
     media.addEventListener('change', update)
     return () => media.removeEventListener('change', update)
   }, [])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setLoad(true); observer.disconnect() }
-    }, { rootMargin: '100% 0px' })
-    if (section.current) observer.observe(section.current)
-    return () => observer.disconnect()
+    const nearby = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setLoaded(true); nearby.disconnect() }
+    }, { rootMargin: '60% 0px' })
+    const onscreen = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting))
+    if (root.current) { nearby.observe(root.current); onscreen.observe(root.current) }
+    return () => { nearby.disconnect(); onscreen.disconnect() }
   }, [])
 
   useEffect(() => {
     const element = video.current
-    if (!element || !load || reduced) return
-    let target = 0
-    let frame = 0
-    // Only one seek at a time; seeked catches up to the latest scroll position.
-    const seek = () => {
-      frame = 0
-      if (!element.seeking && element.readyState >= 2 && Number.isFinite(element.duration)) {
-        const time = target * Math.max(0, element.duration - 0.04)
-        if (Math.abs(element.currentTime - time) > 0.025) element.currentTime = time
+    if (!element) return
+    const sync = () => {
+      if (loaded && visible && !paused && !reduced && !opened && !document.hidden) {
+        void element.play().catch(() => setPlaying(false))
+      } else element.pause()
+    }
+    sync()
+    document.addEventListener('visibilitychange', sync)
+    return () => { document.removeEventListener('visibilitychange', sync); element.pause() }
+  }, [loaded, visible, paused, reduced, opened])
+
+  useEffect(() => {
+    let disposed = false
+    const context = gsap.context(() => {
+      if (reduced) return
+      const stage = root.current!.querySelector<HTMLElement>('.film-stage')!
+      const initialCup = () => {
+        const cup = stage.querySelector('.pulse-u')!.getBoundingClientRect()
+        const box = stage.getBoundingClientRect()
+        const left = cup.left - box.left + cup.width * .3
+        const top = cup.top - box.top
+        const right = box.width - (cup.left - box.left + cup.width * .7)
+        const bottom = box.height - (top + cup.height * 295 / 350)
+        return `inset(${top}px ${right}px ${bottom}px ${left}px round 0px 0px ${cup.width * .2}px ${cup.width * .2}px)`
       }
-    }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(seek) }
-    const trigger = ScrollTrigger.create({
-      trigger: section.current,
-      start: 'top top', end: 'bottom bottom',
-      onUpdate: self => {
-        target = self.progress
-        if (progress.current) progress.current.style.transform = `scaleX(${target})`
-        schedule()
-      },
-    })
-    target = trigger.progress
-    element.addEventListener('loadeddata', schedule)
-    element.addEventListener('seeked', schedule)
-    schedule()
-    return () => {
-      trigger.kill()
-      cancelAnimationFrame(frame)
-      element.removeEventListener('loadeddata', schedule)
-      element.removeEventListener('seeked', schedule)
-    }
-  }, [load, reduced])
+      const timeline = gsap.timeline({ scrollTrigger: {
+        trigger: root.current, start: 'top top', end: 'bottom bottom', scrub: .55, invalidateOnRefresh: true,
+      } })
+      timeline.to('.film-progress i', { scaleX: 1, duration: 1, ease: 'none' }, 0)
+      timeline.to('.film-hint', { opacity: 0, y: -8, duration: .12 }, .1)
+      if (variant === 'pulse') {
+        timeline.fromTo('.film-window', { clipPath: initialCup }, { clipPath: 'inset(0px 0px 0px 0px round 0px 0px 0px 0px)', duration: .56, ease: 'power3.inOut' }, .12)
+        timeline.to('.pulse-word', { opacity: 0, duration: .28 }, .3)
+        timeline.fromTo('.film-title', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: .22 }, .52)
+        timeline.fromTo('.film-detail', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: .2 }, .58)
+      } else if (variant === 'fog') {
+        timeline.fromTo('.cloud-near', { xPercent: -3, yPercent: 0, opacity: 1 }, { xPercent: -28, yPercent: -12, opacity: 0, duration: .7, ease: 'power1.inOut' }, 0)
+        timeline.fromTo('.cloud-far', { xPercent: 3, opacity: .95 }, { xPercent: 23, opacity: 0, duration: .75 }, .05)
+        timeline.to('.fog-veil', { opacity: 0, duration: .65 }, .05)
+        timeline.fromTo('.film-window video', { scale: 1.06 }, { scale: 1, duration: 1, ease: 'none' }, 0)
+        timeline.fromTo('.film-title', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: .3 }, .35)
+        timeline.fromTo('.film-detail', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: .25 }, .5)
+        timeline.to('.film-top', { color: '#f3f1e9', duration: .3 }, .35)
+      } else {
+        timeline.fromTo('.film-window', { clipPath: 'inset(33% 13% 33% 13%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: .7, ease: 'power2.inOut' }, .08)
+        timeline.to('.water-reflection', { opacity: 0, duration: .25 }, .22)
+        timeline.to('.water-heading', { color: '#f3f1e9', yPercent: -14, duration: .45 }, .25)
+        timeline.to('.film-top,.film-bottom', { color: '#f3f1e9', duration: .3 }, .35)
+        timeline.fromTo('.film-shade', { opacity: 0 }, { opacity: 1, duration: .4 }, .35)
+        timeline.fromTo('.film-detail', { opacity: 0 }, { opacity: 1, duration: .25 }, .65)
+      }
+    }, root)
+    // The U opening is measured from the actual letter, including after font load and resize.
+    void document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh() })
+    return () => { disposed = true; context.revert() }
+  }, [reduced, variant])
 
-  return <FilmSection ref={section} id={film.id} aria-label={`Film ${index + 1}: ${film.line}`}>
-    <div className="film-stage">
-      <video ref={video} src={load ? film.src : undefined} poster={film.poster} muted playsInline preload={load ? 'auto' : 'none'} controls={!!reduced} onError={() => setFailed(true)} aria-label={film.line} />
-      <div className="film-shade" />
-      <div className="film-caption"><span>MelingMedia / I bevegelse</span><p>{film.line}</p></div>
-      <h3>{film.word}</h3>
-      <div className="film-bottom"><span>{failed ? 'Videoen kunne ikke lastes.' : reduced ? 'Spill av filmen i ditt tempo.' : 'Scroll. Se øyeblikket bevege seg.'}</span><span>{String(index + 1).padStart(2, '0')} / {String(videos.length).padStart(2, '0')}</span><a href="#arbeider">Til bildene ↗</a></div>
-      <div ref={progress} className="film-progress" />
-    </div>
-  </FilmSection>
+  const closeCinema = () => { cinema.current?.pause(); dialog.current?.close(); setOpened(false); opener.current?.focus({ preventScroll: true }) }
+  const toggle = () => {
+    if (playing) { setPaused(true); video.current?.pause() }
+    else { setPaused(false); void video.current?.play().catch(() => setPlaying(false)) }
+  }
+
+  return <>
+    <FilmStage ref={root} id={variant === 'fog' ? 'filmer' : `film-${variant}`} className={`variant-${variant}`} aria-labelledby={`film-title-${variant}`}>
+      <div className="film-stage">
+        {variant === 'pulse' && <div className="pulse-word" aria-hidden="true"><span>P</span><svg className="pulse-u" viewBox="0 0 200 350"><path d="M10 0H60V245Q60 295 100 295Q140 295 140 245V0H190V245Q190 350 100 350Q10 350 10 245Z" /></svg><span>LS<span className="pulse-dot">.</span></span></div>}
+        {variant === 'water' && <img className="water-reflection" src={film.poster} alt="" loading="lazy" />}
+        <div className="film-window">
+          <video ref={video} src={loaded ? film.src : undefined} poster={film.poster} muted playsInline loop preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)} aria-label={film.line} />
+          <div className="film-shade" />
+          <div className="film-detail"><span>{['OVER SKYENE', 'MELLOM AVGANG OG ANKOMST', 'ET LEVENDE FOTOGRAFI'][index]}</span><p>{variant === 'fog' ? <>Et annet<br />perspektiv.</> : variant === 'water' ? <>Bare her.<br />Bare nå.</> : <>Tusen retninger.<br />Ett øyeblikk.</>}</p></div>
+          {variant !== 'water' && <h2 className="film-title" id={`film-title-${variant}`}>{film.word.slice(0, -1)}<span>.</span></h2>}
+        </div>
+        {variant === 'fog' && <div className="clouds" aria-hidden="true"><div className="fog-veil" /><img className="cloud-far" src="/textures/clouds.svg" alt="" /><img className="cloud-near" src="/textures/clouds.svg" alt="" /></div>}
+        {variant === 'water' && <h2 className="water-heading" id={`film-title-${variant}`}>STILLE.</h2>}
+        <div className="film-top"><span>0{index + 1} / {['HØYDE', 'BEVEGELSE', 'RO'][index]}</span><span className="film-signature"><i /> MELINGMEDIA FILM</span></div>
+        <div className="film-controls"><button onClick={toggle} disabled={!loaded || failed} aria-label={playing ? 'Pause video' : 'Spill av video'}><span aria-hidden="true">{playing ? 'Ⅱ' : '▷'}</span></button><button ref={opener} onClick={() => { setLoaded(true); setOpened(true); dialog.current?.showModal() }}>Se filmen <span aria-hidden="true">↗</span></button></div>
+        <div className="film-bottom"><span>{failed ? 'Filmen kunne ikke lastes.' : film.line}</span><span className="film-hint">{variant === 'pulse' ? 'ET ØYEBLIKK INNE I BOKSTAVEN' : variant === 'fog' ? 'GJENNOM TÅKEN' : 'GI ØYEBLIKKET PLASS'} ↓</span></div>
+        <div className="film-progress" aria-hidden="true"><i /></div>
+      </div>
+    </FilmStage>
+    <Cinema ref={dialog} onCancel={closeCinema} onClose={() => { cinema.current?.pause(); setOpened(false) }} onClick={event => { if (event.target === event.currentTarget) closeCinema() }} aria-label={film.word + ' – ' + film.line}>
+      <button className="cinema-close" onClick={closeCinema} autoFocus>Lukk ×</button>
+      {opened && <video ref={cinema} src={film.src} poster={film.poster} controls autoPlay playsInline />}
+      <p>{film.word} <span>MelingMedia / {film.line}</span></p>
+    </Cinema>
+  </>
 }
-
-export default function VideoStory() {
-  return <section id="filmer" aria-labelledby="films-title">
-    <FilmIntro><span>02 — Film</span><h2 id="films-title">I BEVEGELSE.</h2><p>Et øyeblikk på reisen. Du bestemmer tempoet.</p><a href="#arbeider">Hopp til bildearkivet ↗</a></FilmIntro>
-    {videos.map((film, index) => <Film key={film.id} film={film} index={index} />)}
-  </section>
-}
-
-const FilmIntro = styled.div`
-  padding:80px 6vw;background:#101211;position:relative;
-  >span{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#b4b7ab;}
-  h2{font-family:'Barlow Condensed',Impact,sans-serif;font-size:clamp(60px,11vw,160px);font-weight:500;letter-spacing:-.03em;line-height:1;margin:25px 0;}
-  p{color:#b4b7ab;font-size:16px;}a{display:inline-block;margin-top:20px;font-size:13px;border-bottom:1px solid #ffffff60;padding-bottom:8px;}
-`
-const FilmSection = styled.article`
-  height:190svh;position:relative;background:#101211;
-  .film-stage{position:sticky;top:0;height:100svh;overflow:hidden;}
-  video{width:100%;height:100%;object-fit:cover;display:block;}
-  .film-shade{position:absolute;inset:0;background:linear-gradient(#0005,transparent 35%,#0009);pointer-events:none;}
-  .film-caption{position:absolute;top:16%;left:6vw;pointer-events:none;text-shadow:0 2px 20px #0008;}
-  .film-caption>span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;}.film-caption p{font-size:18px;}
-  h3{position:absolute;bottom:14%;left:5vw;font-family:'Barlow Condensed',Impact,sans-serif;font-size:clamp(100px,22vw,340px);font-weight:600;line-height:.8;letter-spacing:-.035em;margin:0;pointer-events:none;}
-  .film-bottom{position:absolute;bottom:32px;left:6vw;right:6vw;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:12px;}
-  .film-progress{position:absolute;bottom:0;width:100%;height:3px;background:var(--accent);transform:scaleX(0);transform-origin:left;}
-  @media(max-width:700px){height:170svh;.film-caption p{font-size:16px;}.film-bottom{font-size:11px;bottom:24px;}.film-bottom>span:first-child{max-width:125px;}h3{font-size:24vw;bottom:18%;}}
-  @media(prefers-reduced-motion:reduce){height:100svh;.film-stage{position:relative;} .film-progress{display:none;}.film-bottom{bottom:75px;}h3{bottom:23%;}.film-shade{pointer-events:none;}}
-`

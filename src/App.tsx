@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { motion, useReducedMotion } from 'motion/react'
 import { useGSAP } from '@gsap/react'
@@ -63,7 +63,7 @@ export default function App() {
   const changeLayout = () => {
     if (!grid.current) return
     flip.current?.progress(1)
-    const state = Flip.getState(grid.current.children)
+    const state = Flip.getState(grid.current.querySelectorAll(':scope > article'))
     flushSync(()=>setCompact(v=>!v))
     if (!reduced) flip.current = Flip.from(state,{duration:.8,ease:'power3.inOut',stagger:.02,onComplete:()=>ScrollTrigger.refresh()})
     else ScrollTrigger.refresh()
@@ -113,12 +113,12 @@ export default function App() {
       <Archive id="arbeider">
         <div className="archive-heading"><div><span className="section-tag">03 — Bildearkivet</span><h2>ØYEBLIKK<span>({pad(photos.length)})</span></h2></div><button className="layout-button" aria-pressed={compact} onClick={()=>contextSafe(changeLayout)()}><Icon name={compact ? 'diagonal' : 'grid'} size={18}/>{compact ? 'Redaksjonell' : 'Kontaktark'}</button></div>
         <Grid ref={grid} $compact={compact}>
-          {photos.map((photo,i)=><Tile key={photo.id} $compact={compact} $portrait={photo.height>photo.width}>
+          {photos.map((photo,i)=><Fragment key={photo.id}><Tile key={photo.id} $compact={compact} $portrait={photo.height>photo.width}>
             <div className="tile-inner"><motion.button className="photo-button" onClick={()=>setSelected(photo)} aria-label={'Åpne '+photo.title} whileHover={reduced?undefined:{scale:.985}} transition={{duration:.35}}>
               <img src={photo.thumb} srcSet={photo.thumb+' 720w, '+photo.src+' 1600w'} sizes={compact?'(max-width: 700px) 50vw, 30vw':'(max-width: 700px) 90vw, 65vw'} alt={photo.alt} loading="lazy" width={photo.width} height={photo.height} />
               <span className="open-mark" aria-hidden="true"><Icon/></span>
             </motion.button><div className="photo-caption"><span>{pad(i+1)} / {photo.title}</span><span>Se fotografi <Icon size={14}/></span></div></div>
-          </Tile>)}
+          </Tile>{(i === 6 || i === 13) && <div className="film-break"><VideoStory variant={i === 6 ? 'pulse' : 'water'} /></div>}</Fragment>)}
         </Grid>
       </Archive>
       <Footer className="closing">
