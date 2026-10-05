@@ -44,7 +44,8 @@ export const FilmStage = styled.section`
   .film-detail::before{content:'';position:absolute;inset:-22px -30px;z-index:-1;background:radial-gradient(ellipse,#030a1260,transparent 72%);pointer-events:none;}
   .film-top,.film-bottom{text-shadow:0 1px 3px #000c,0 2px 12px #0009;}
   &.variant-fog .film-top,&.variant-water .film-top,&.variant-water .film-bottom{text-shadow:0 1px 4px #0005;}
-  .water-heading{text-shadow:0 3px 16px #0004;}
+  .water-heading{text-shadow:0 3px 16px #0004;top:max(140px,18svh);}
+  @media(max-width:700px){.water-heading{top:max(120px,18svh);}}
   &.variant-airplane{background:radial-gradient(ellipse at 50% 40%,#fff 0%,#dbe1e4 56%,#aebbc3 100%);color:#25323a;.film-window{clip-path:inset(50% 50%);}.film-detail,.film-title{color:#f3f1e9;}.film-top,.film-bottom{text-shadow:none;}.film-controls{bottom:12%;}.film-title{font-size:19vw;}}
   .air-measure,.air-frame{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:clamp(260px,34vw,470px);height:min(65svh,620px);border-radius:44% / 28%;pointer-events:none;}
   .air-measure{visibility:hidden;}.air-frame{box-shadow:inset 0 3px 12px #030b1266,0 0 0 3px #71828b,0 0 0 12px #c5cdd1,0 0 0 14px #f7fafb,0 0 0 26px #e5e9eb,0 15px 38px 30px #5d707633;}

@@ -1,26 +1,26 @@
 import generated from './generated-photos.json'
 
 const descriptions: Record<number, [string,string]> = {
-  1:['Veien videre','En svingete fjellvei i et snødekt landskap, fotografert i svart-hvitt.'],
-  2:['Gjennom fjellet','En vei leder inn i en tunnel under dramatiske skyer.'],
+  1:['Linjer mot himmelen','Arkitektoniske linjer strekker seg mot en skyfylt himmel, i svart-hvitt.'],
+  2:['Mellom fjellene','En liten båt mellom bratte, grønne klipper i turkis vann.'],
   3:['Vektløs','Et kunstnerisk svart-hvitt-portrett i et badekar.'],
   4:['Over alt','En person står på en fjellrygg med utsikt over fjellene.'],
   5:['Mellom rom','En person i enden av en smal korridor, i svart-hvitt.'],
-  6:['Et annet tempo','En kvinne med solhatt ved en sykkel og en blå dør.'],
+  6:['I varmen','En kvinne står i en trapp mellom varme, oransje fasader.'],
   7:['Det siste lyset','En kvinne i en flagrende kjole i et varmt, steinete landskap.'],
   8:['Fritt fall','Figurer av stupere foran en stor innendørs vannvegg.'],
   9:['Stillheten','En kvinne på gyllen sand under en dypblå himmel.'],
   10:['Mot vinden','Bølger slår mot en kystvei under en mørk himmel.'],
-  11:['Uvær','En steinmolo møter opprørt hav og tunge skyer.'],
-  12:['Havets rytme','Hvite bølgetopper under en dramatisk skyhimmel.'],
-  13:['Der havet tar tak','Store bølger og bygninger langs en værhard kyst.'],
+  11:['Langs klippene','En liten båt foran høye kystklipper og bygninger i varmt lys.'],
+  12:['Under overflaten','En person flyter under vann i et blått basseng.'],
+  13:['Der havet tar tak','Hvite bølgetopper og en molo under en dramatisk skyhimmel.'],
   14:['Byen sover aldri','En bil i snø og damp i en opplyst bygate om natten.'],
-  15:['Midt i alt','Snøfall, mennesker og lysende reklameskilt på Times Square.'],
-  16:['Et stille New York','En snødekt gate mellom høye bygninger.'],
-  17:['Helt stille','En steinmolo strekker seg ut i et stille, blått hav.'],
-  18:['På vei','En person går gjennom en smal gate med varme fasader.'],
-  19:['Blå dager','Et basseng og en kirke med kupler under blå himmel.'],
-  20:['Ved vannet','En strand og bølger sett fra en terrasse.'],
+  15:['Midt i alt','Et tog passerer mennesker på en undergrunnsstasjon ved Times Square.'],
+  16:['Forbi','Et disig bylandskap og kraftlinjer i bevegelsesuskarphet.'],
+  17:['Helt stille','En havn med båter og en lang molo omgitt av dypt blått hav.'],
+  18:['Lys og skygge','En kvinne med solhatt ved en lys bygning med geometriske skygger, i svart-hvitt.'],
+  19:['Ved vannet','Hvite, geometriske bygninger står omgitt av blått vann.'],
+  20:['Langs bukten','En kystby ved en bukt under skyer og sollys.'],
   21:['Et lite øyeblikk','En strand med bølger og mennesker ved vannkanten.'],
 }
 export const photos = generated.map(photo => ({
@@ -39,4 +39,3 @@ export const chapters = [
   const photo = photos.find(item => item.number === chapter.number)
   return photo ? [{...chapter,photo}] : []
 })
-

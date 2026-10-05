@@ -1,16 +1,19 @@
 import styled from 'styled-components'
 
 export const Nav = styled.nav`
-position:absolute;z-index:20;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:32px 4vw;color:white;
+position:fixed;z-index:50;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 4vw;color:white;background:#101211b8;backdrop-filter:blur(12px);
 .brand{font-size:30px;font-weight:600;letter-spacing:-1.6px;line-height:.85;display:flex;flex-direction:column;}
 .brand span{font-size:15px;letter-spacing:-.3px;margin-top:5px;}
+.brand img{display:block;width:150px;height:auto;filter:brightness(0) invert(1);}
+@media(max-width:700px){.brand img{width:130px;}}
+@media(max-width:380px){.brand img{width:115px;}}
 .nav-note{font-size:13px;letter-spacing:.03em;}
 .nav-links{display:flex;align-items:center;gap:25px;}.booking-link{display:inline-flex;align-items:center;gap:12px;border:1px solid #ffffff80;border-radius:30px;padding:12px 18px;font-size:14px;white-space:nowrap;}
 @media(max-width:1000px){.nav-note{display:none;}}
 @media(max-width:450px){.nav-links{gap:14px;}.booking-link{font-size:12px;padding:11px 13px;gap:8px;}.archive-link{font-size:12px!important;}.archive-link span{display:none;}}
 @media(max-width:380px){.nav-links .archive-link{display:none;}}
 .archive-link{font-size:14px;} .archive-link span{margin-left:12px;font-size:12px;opacity:.7;}
-@media(max-width:700px){padding:25px 6vw;.nav-note{display:none}.brand{font-size:26px}.archive-link span{margin-left:5px;}}
+@media(max-width:700px){padding:12px 6vw;.nav-note{display:none}.brand{font-size:26px}.archive-link span{margin-left:5px;}}
 `
 export const Story = styled.section<{ $count:number }>`
 position:relative;height:${p=>Math.max(1,p.$count)*125}svh;background:#151919;
@@ -20,6 +23,7 @@ export const Stage = styled.div`
 position:sticky;top:0;height:100svh;overflow:hidden;
 .stage-bottom{position:absolute;bottom:32px;left:4vw;right:4vw;z-index:10;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.02em;}
 .stage-bottom a{display:flex;align-items:center;gap:35px;}.stage-bottom a span{font-size:24px;}
+.stage-bottom{justify-content:center;}
 .story-progress{position:absolute;bottom:0;left:0;width:100%;height:3px;background:var(--accent);z-index:12;transform:scaleX(0);transform-origin:left;}
 @media(max-width:700px){.stage-bottom{left:6vw;right:6vw;bottom:24px;}.edition{display:none;}.stage-bottom>a{gap:12px;}.stage-bottom>span:first-child{max-width:100px;line-height:1.6;}}
 @media(prefers-reduced-motion:reduce){height:auto;position:relative;overflow:visible;.stage-bottom,.story-progress{display:none;}}
@@ -97,4 +101,3 @@ button{background:transparent;border:1px solid #ffffff50;padding:12px 20px;borde
 .viewer-bottom{position:absolute;bottom:22px;left:5vw;right:5vw;display:flex;align-items:center;justify-content:space-between;gap:15px;}
 .viewer-bottom>span{text-align:center;font-size:14px;}.viewer-bottom small{display:block;color:#aaa;font-size:12px;margin-top:6px;}
 `
-

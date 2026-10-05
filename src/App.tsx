@@ -34,11 +34,9 @@ export default function App() {
         panels.forEach((panel,i) => {
           const photo = panel.querySelector('.scene-image')
           const type = panel.querySelector('.scene-type')
-          const caption = panel.querySelector('.scene-caption')
           if (i > 0) {
             timeline.to(panel,{clipPath:'inset(0% 0% 0% 0%)',duration:1,ease:'power2.inOut'},i)
             timeline.fromTo(type,{yPercent:70,opacity:0},{yPercent:0,opacity:1,duration:.7},i+.25)
-            timeline.fromTo(caption,{opacity:0,y:20},{opacity:1,y:0,duration:.5},i+.45)
           }
           timeline.fromTo(photo,{scale:1.14,yPercent:-3},{scale:1,yPercent:3,duration:1.8,ease:'none'},Math.max(0,i-.3))
           if(i < panels.length-1) timeline.to(type,{yPercent:-25,opacity:0,duration:.65},i+.9)
@@ -88,19 +86,18 @@ export default function App() {
 
   return <div ref={root}>
     <a className="skip" href="#arbeider">Hopp til bildene</a>
-    <Nav><a className="brand" href="#top" aria-label="MelingMedia, forsiden">meling<span>media®</span></a><span className="nav-note">Et blikk. En historie.</span><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
+    <Nav aria-label="Hovedmeny"><a className="brand" href="#top" aria-label="MelingMedia, forsiden"><img src="/logo/meling_media_logo_header.webp" alt="MelingMedia" width="240" height="123" /></a><div className="nav-links"><a className="archive-link" href="#arbeider">Bildearkiv <span>({pad(photos.length)})</span></a><a className="booking-link" href="/kontakt/">Kontakt <Icon size={16}/></a></div></Nav>
     <main>
       <Story id="top" ref={story} $count={chapters.length}>
         <Stage ref={stage}>
           {chapters.map((chapter,i)=><Panel className="story-panel" key={chapter.number} $index={i} $position={chapter.position} $mobile={chapter.mobile}>
-            <img className="scene-image" src={chapter.photo.full} srcSet={chapter.photo.src+' 1600w, '+chapter.photo.full+' 2560w'} sizes="100vw" alt={chapter.photo.alt} fetchPriority={i===0?'high':'auto'} loading={i<2?'eager':'lazy'} />
+            <img className="scene-image" src={chapter.photo.full} srcSet={chapter.photo.srcSet} sizes="100vw" alt={chapter.photo.alt} fetchPriority={i===0?'high':'auto'} loading={i<2?'eager':'lazy'} />
             <div className="shade" />
-            <div className="scene-caption"><span>{chapter.eyebrow}</span><p>{chapter.line}</p></div>
             <div className="scene-type">{i===0?<h1>{chapter.word}</h1>:<h2>{chapter.word}</h2>}</div>
             <span className="scene-index">{pad(i+1)} <span>/ {pad(chapters.length)}</span></span>
           </Panel>)}
           <Rail aria-label="Bildekapitler">{chapters.map((c,i)=><button key={c.number} aria-label={'Vis kapittel '+pad(i+1)+': '+c.line} aria-current={active===i?'step':undefined} onClick={()=>goTo(i)}><span>{pad(i+1)}</span><i /></button>)}</Rail>
-          <div className="stage-bottom"><span>Fotografi som kjennes.</span><a href="#introduksjon">Scroll for å utforske <Icon name="down" size={24}/></a><span className="edition">Utvalgte øyeblikk / {new Date().getFullYear()}</span></div>
+          <div className="stage-bottom"><a href="#introduksjon" aria-label="Scroll til introduksjonen"><Icon name="down" size={24}/></a></div>
           <div className="story-progress" />
         </Stage>
       </Story>
@@ -115,7 +112,7 @@ export default function App() {
         <Grid ref={grid} $compact={compact}>
           {photos.map((photo,i)=><Fragment key={photo.id}><Tile key={photo.id} $compact={compact} $portrait={photo.height>photo.width}>
             <div className="tile-inner"><motion.button className="photo-button" onClick={()=>setSelected(photo)} aria-label={'Åpne '+photo.title} whileHover={reduced?undefined:{scale:.985}} transition={{duration:.35}}>
-              <img src={photo.thumb} srcSet={photo.thumb+' 720w, '+photo.src+' 1600w'} sizes={compact?'(max-width: 700px) 50vw, 30vw':'(max-width: 700px) 90vw, 65vw'} alt={photo.alt} loading="lazy" width={photo.width} height={photo.height} />
+              <img src={photo.thumb} srcSet={photo.thumbSrcSet} sizes={compact?'(max-width: 700px) 50vw, 30vw':'(max-width: 700px) 90vw, 65vw'} alt={photo.alt} loading="lazy" width={photo.width} height={photo.height} />
               <span className="open-mark" aria-hidden="true"><Icon/></span>
             </motion.button><div className="photo-caption"><span>{pad(i+1)} / {photo.title}</span><span>Se fotografi <Icon size={14}/></span></div></div>
           </Tile>{(i === 6 || i === 10 || i === 13 || i === 20) && <div className="film-break"><VideoStory variant={i === 6 ? 'pulse' : i === 10 ? 'airplane' : i === 13 ? 'water' : 'panorama'} /></div>}</Fragment>)}
@@ -133,6 +130,3 @@ export default function App() {
     </Viewer>
   </div>
 }
-
-
-

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ContactPage = styled.main`
 min-height:100svh;display:grid;grid-template-columns:46% 54%;background:#eae9e2;color:#20251e;
->nav {position:absolute;} >nav .nav-links{color:#20251e;} >nav .booking-link{border-color:#20251e55;}
+>nav .nav-links{color:#fff;} >nav .booking-link{border-color:#ffffff80;}
 @media(max-width:850px){display:block;>nav .nav-links{color:#fff;} >nav .booking-link{border-color:#ffffff80;}}
 `
 export const ContactVisual = styled.aside`

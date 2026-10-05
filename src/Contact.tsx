@@ -23,11 +23,11 @@ export default function Contact({ thanks = false }: { thanks?: boolean }) {
   return <ContactPage>
     <a className="skip" href="#kontakt">Hopp til kontaktskjemaet</a>
     <Nav aria-label="Hovedmeny">
-      <a className="brand" href="/" aria-label="MelingMedia, forsiden">meling<span>media®</span></a>
+      <a className="brand" href="/" aria-label="MelingMedia, forsiden"><img src="/logo/meling_media_logo_header.webp" alt="MelingMedia" width="240" height="123" /></a>
       <div className="nav-links"><a className="archive-link" href="/#arbeider">Bildearkiv</a><a className="booking-link" href="/kontakt/" aria-current="page">Kontakt <Icon size={16} /></a></div>
     </Nav>
     <ContactVisual>
-      {photo && <img src={photo.src} srcSet={`${photo.src} 1600w, ${photo.full} 2560w`} sizes="(max-width: 850px) 100vw, 46vw" alt={photo.alt} fetchPriority="high" />}
+      {photo && <img src={photo.src} srcSet={photo.srcSet} sizes="(max-width: 850px) 100vw, 46vw" alt={photo.alt} fetchPriority="high" />}
       <div className="visual-shade" />
       <div className="visual-copy"><span>MELINGMEDIA / PRINT &amp; HENVENDELSER</span><p>ET<br/>ØYEBLIKK.<br/><em>DIN VEGG.</em></p><div className="visual-bottom"><span>Et fotografi å leve med.</span><Icon name="downRight" size={32}/></div></div>
     </ContactVisual>
@@ -61,4 +61,3 @@ export default function Contact({ thanks = false }: { thanks?: boolean }) {
     </ContactContent>
   </ContactPage>
 }
-
